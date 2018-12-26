@@ -1,33 +1,30 @@
 <template>
   <section class="container">
     <h1>{{ msg }}</h1>
-    <h2 @click="loadData">Essential Links</h2>
-    <select v-model="boardUrl">
-      <option v-for="board in boards" v-bind:value="board">{{ board }}</option>
-    </select>
-    <pin id="leftPin" :pin="currentBattle.leftPin"></pin>
-    <div id="rightPin">
-
-    </div> -->
+    <div>
+      <select v-model="boardUrl">
+        <option v-for="board in boards" v-bind:value="board" :key="board.id">{{ board }}</option>
+      </select>
+    </div>
+    <voter :leftPin="currentBattle.leftPin" :rightPin="currentBattle.rightPin" ></voter>
     <ul class="pins">
-      <li class="pin" v-for="pin in pins">
-        <div>
-          <img :id="'pin_' + pin.id" :alt="pin.note" :src="pin.image.original.url" class="pinimage" />
-          <label :for="'pin_' + pin.id" :title="pin.note">{{pin.note | shorten}}</label>
-        </div>
+      <li class="pin" v-for="pin in pins" :key="pin.id">
+        <pin :pin="pin"></pin>
       </li>
     </ul>
   </section>
 </template>
 
 <script>
-import Pin from '~/components/Pin.vue'
+import Voter from '~/components/voter'
+import Pin from '~/components/pin'
 const baseURL = 'https://api.pinterest.com/v1/boards/'
 const baseAttributes =
   'pins/?access_token=Aqcz_spf3RhZtDPlRK92HyIp8LPrFV7N46frza1FUqm0hcBwrwJUQDAAABEFRVKuoFdAUXEAAAAA&limit=20&fields=id,image,note'
 
 export default {
   name: 'PinterestVote',
+  components: { Pin, Voter },
   data() {
     return {
       msg: 'Hello',
@@ -101,6 +98,7 @@ export default {
 
 <style>
 .container {
+  width: 100vw;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
@@ -118,22 +116,5 @@ h2 {
 }
 a {
   color: #42b983;
-}
-.pin {
-  margin: 0 10px;
-  width: 15vw;
-  min-width: 100px;
-}
-.pin label {
-}
-.pinimage {
-  display: block;
-  height: 15vw;
-  width: 15vw;
-  min-height: 100px;
-  min-width: 100px;
-  /* object-fit: cover; */
-  /* width: 50px;
-  height: 100px; */
 }
 </style>
